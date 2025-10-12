@@ -1,31 +1,47 @@
-# MindMirror — An AI Cognitive Reflection Coach
+ReflectAI — Safe Space to Declutter Your Thoughts
 
-**Tagline:** “Your AI companion for journaling, reflection, and emotional awareness — powered by safe, empathetic dialogue.”
+Tagline: “Your AI companion for journaling, reflection, and emotional awareness — safe, empathetic, and thoughtful.”
 
-## 🌍 Problem
+-->Problem
 
-Mental well-being often deteriorates due to lack of reflection, journaling, or unbiased listening. However, most AI “therapy bots” risk unsafe or unregulated advice.
+Our mental well-being often suffers from a lack of reflection, journaling, or someone to listen without judgment. Most AI “therapy bots” risk giving unsafe or unregulated advice.
 
-## 💡 Solution
+-->Solution
 
-MindMirror uses Phi-3 + NeMo Guardrails to power guided reflection sessions.
-The model asks structured reflection prompts, listens empathetically (via Whisper), and analyzes sentiment — all while enforcing ethical boundaries via Guardrails (e.g., never making medical claims or unsafe suggestions).
+ReflectAI offers guided reflection sessions powered by Phi-3 + NeMo Guardrails. It:
 
-## ⚙️ Tech Stack
+Prompts you with thoughtful, structured reflection questions
 
-- **LLM:** Phi-3 (via Ollama / Together API)
-- **Safety:** NeMo Guardrails (custom rails for emotional safety + redirection)
-- **Voice Stack:** Whisper + Bark for STT/TTS
-- **Frontend:** React
-- **Backend:** FastAPI
-- **Analytics:** Streamlit dashboard for emotional trend visualization
+Listens empathetically via Whisper
 
-## ✨ Features
+Analyzes your sentiment over time
 
-- Daily summaries & “Mood Timeline” tracking
+Maintains strict ethical boundaries with Guardrails (e.g., no medical advice or unsafe suggestions)
 
-## 🌐 Outcome
+-->Tech Stack
 
-A live web app that feels like a guided mental coach — reflective, emotionally intelligent, and strictly compliant.
+LLM: Phi-3 (via Ollama / Together API)
 
-**Focus:** ethical emotional AI, responsible human-AI conversation design.
+Safety: NeMo Guardrails (custom rules for emotional safety & redirection)
+
+Voice Stack: Whisper + Bark for STT/TTS
+
+Frontend: React
+
+Backend: FastAPI
+
+Analytics: Streamlit dashboard to visualize emotional trends
+
+-->Features
+
+Daily reflection prompts
+
+Mood Timeline & emotional trend tracking
+
+Safe, private space for mental decluttering
+
+-->Outcome
+
+A live web app that feels like a guided mental coach — reflective, emotionally intelligent, and fully compliant with safety standards.
+
+Focus: Ethical emotional AI, responsible human-AI conversation design.
