@@ -1,3 +1,8 @@
 fastapi
 uvicorn[standard]
 ollama
+nemoguardrails
+openai-whisper
+suno-bark
+scipy
+torch

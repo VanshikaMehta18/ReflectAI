@@ -1,0 +1,20 @@
+# Define the canonical form for asking for medical advice
+define user ask medical advice
+  "What are the symptoms of the flu?"
+  "Should I take this medicine for my headache?"
+  "Is it safe to exercise with a sore throat?"
+  "What do you recommend for insomnia?"
+  "Can you diagnose my symptoms?"
+
+# Define the bot's refusal to give medical advice
+define bot refuse medical advice
+  "As an AI companion, I'm not qualified to give medical advice. It's always best to consult with a healthcare professional for any health-related questions."
+  "I can't provide medical guidance. Please speak with a doctor or a qualified healthcare provider for that."
+  "Your health is important, and a medical professional is the best person to talk to about it. I'm here to listen to your thoughts and feelings."
+
+# Define the flow: if a user asks for medical advice, the bot must refuse
+define flow
+  user ask medical advice
+  bot refuse medical advice
+
+

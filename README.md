@@ -45,3 +45,8 @@ Safe, private space for mental decluttering
 A live web app that feels like a guided mental coach — reflective, emotionally intelligent, and fully compliant with safety standards.
 
 Focus: Ethical emotional AI, responsible human-AI conversation design.
+
+---
+
+### Implementation Status
+

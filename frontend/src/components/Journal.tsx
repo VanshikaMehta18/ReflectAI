@@ -12,6 +12,10 @@ const Journal: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [prompt, setPrompt] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -38,6 +42,57 @@ const Journal: React.FC = () => {
     fetchPrompt();
   }, []);
 
+  const handleStartRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const formData = new FormData();
+        formData.append('file', audioBlob, 'recording.webm');
+        
+        setIsLoading(true); // Show loading indicator while transcribing
+        try {
+          const response = await fetch('http://localhost:8000/transcribe', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setEntry(data.transcription);
+          } else {
+            console.error('Failed to transcribe audio.');
+          }
+        } catch (error) {
+          console.error('Error transcribing audio:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Error accessing microphone:', error);
+      // You might want to show an error message to the user here
+    }
+  };
+
+  const handleStopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!entry.trim()) return;
@@ -59,6 +114,26 @@ const Journal: React.FC = () => {
         const chatData = await chatResponse.json();
         const aiMessage: Message = { sender: 'ai', content: chatData.response };
         setMessages(prevMessages => [...prevMessages, aiMessage]);
+
+        // New: Synthesize and play audio for the AI response
+        try {
+          const synthesisResponse = await fetch('http://localhost:8000/synthesize', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: chatData.response }),
+          });
+          if (synthesisResponse.ok) {
+            const audioBlob = await synthesisResponse.blob();
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            audio.play();
+          } else {
+            console.error('Failed to synthesize audio.');
+          }
+        } catch (error) {
+          console.error('Error synthesizing audio:', error);
+        }
+
       } else {
         console.error('Failed to get AI response.');
         const errorMessage: Message = { sender: 'ai', content: "Sorry, I couldn't process that. Could you try again?" };
@@ -106,6 +181,13 @@ const Journal: React.FC = () => {
           placeholder="Share your thoughts..."
           rows={3}
         />
+        <button 
+            type="button" 
+            className={`mic-button ${isRecording ? 'recording' : ''}`}
+            onClick={isRecording ? handleStopRecording : handleStartRecording}
+        >
+            {isRecording ? '■' : '●'}
+        </button>
         <button type="submit" className="journal-submit-button" disabled={isLoading}>
           {isLoading ? 'Thinking...' : 'Send'}
         </button>
